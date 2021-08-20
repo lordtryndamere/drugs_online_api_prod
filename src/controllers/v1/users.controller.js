@@ -88,7 +88,7 @@ class UserController {
                 message:"Usuario no encontrado"
             })
         }
-        await user.delete(findUser)
+        await user.remove(findUser)
         res.status(200).send({
             message:"Usuario eliminado exitosamente!",
             data:{}
