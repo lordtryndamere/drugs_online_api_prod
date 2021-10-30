@@ -3,10 +3,10 @@ const morgan  = require('morgan');
 const cors = require('cors');
 const app = express();
 const helmet = require('helmet');
-const dotenv = require('dotenv');
+require('dotenv-flow').config();
 
 const  routers  = require('./routers');
-dotenv.config();
+
 const port = process.env.PORT || 8087
 const initializeDb  = require('./config/typeorm')
 async function init(){
@@ -25,4 +25,6 @@ app.use(helmet());
 app.use(routers())
 app.listen(port, () => {
 console.log(`server on port ${port}`);
+console.log(`Environment ${process.env.NODE_ENV}`);
+
 });

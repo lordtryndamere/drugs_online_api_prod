@@ -11,7 +11,7 @@ const initializeDb = async () => {
     port: databaseConfig.port,
     synchronize: false,
     entities: models,
-    logging:true,
+    logging:false,
   });
 };
 

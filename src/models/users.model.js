@@ -1,8 +1,9 @@
 var EntitySchema = require("typeorm").EntitySchema;
 
+const {USER_STATES,ACCOUNT_TYPE} = require('../constants/states')
 module.exports = new EntitySchema({
-    name: "User", // Will use table name `category` as default behaviour.
-    tableName: "user", // Optional: Provide `tableName` property to override the default behaviour for table name. 
+    name: "User",
+    tableName: "user", 
     columns: {
         idUser: {
             name:'id_user',
@@ -16,39 +17,59 @@ module.exports = new EntitySchema({
             length:255,
             nullable:false,
         },
-        state:{
-            type:"bit",
+        accountType:{
+            name:'account_type',
+            type:'enum',
+            default:ACCOUNT_TYPE.local,
+            enum:ACCOUNT_TYPE,
             nullable:false,
         },
         email:{
+            name:'email',
             type:"varchar",
             length:255,
             nullable:false,
         }
         ,
-        nombre:{
-            name:"nombre",
+        password:{
+            name:'password',
+            type:'varchar',
+            length:50
+        },
+        fullName:{
+            name:"full_name",
             type:"varchar",
             length:255,
             nullable:false,
         }
         ,
-        username:{
-            name:"username",
-            type:"varchar",
-            length:255,
+        phoneNumber:{
+            name:"phone_number",
+            type:'varchar',
+            length:10,
+            nullable:true
+        },
+        state:{
+            type:"enum",
+            default:USER_STATES.CREATED,
+            enum:USER_STATES,
             nullable:false,
+        },
+        createdAt:{
+            name:'created_at',
+            type:'timestamp',
+            nullable:false
+        },
+        
+        updatedAt:{
+            name:'updated_at',
+            type:'timestamp',
+            nullable:true
         }
     },
     relations: {
         role: {
             target: "Role",
-            type: "many-to-one",
-            joinTable: true,
-            cascade: true
-        },
-        dependency:{
-            target: "Dependency",
             type: "many-to-one",
             joinTable: true,
             cascade: true

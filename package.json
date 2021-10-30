@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
+    "dev:development": "cross-env NODE_ENV=development DOTENV_FLOW_PATH=./environments nodemon",
+    "dev:staging": "cross-env NODE_ENV=staging DOTENV_FLOW_PATH=./environments nodemon",
+    "dev:production": "cross-env NODE_ENV=production DOTENV_FLOW_PATH=./environments nodemon"
   },
   "keywords": [],
   "author": "MisterJS",
@@ -13,16 +14,19 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
+    "crypto-js": "^4.1.1",
     "dotenv-flow": "^3.2.0",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
+    "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
+    "sha1": "^1.1.1",
     "typeorm": "^0.2.37"
   },
   "devDependencies": {
+    "@types/bcrypt-nodejs": "0.0.31",
     "nodemon": "^2.0.12"
   }
 }

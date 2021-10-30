@@ -1,40 +1,133 @@
 
 const {getRepository} = require('typeorm');
+const sha1 = require('crypto-js/sha1')
+const {generateAuthToken,TokenTool,generateAccessToken} = require('../../tools/token');
+const {createErrorResponse,createResponse,controllerResponse} = require('../../tools/response')
+const tokenLibrary = new TokenTool();
+
 class UserController {
-    async createUser(req,res){
-        try {
-            let data  = req.body;
-            let user  = getRepository("User")
-            let findUser  =await  user.findOne({
-                where: {
-                    document:data.document
-                }
-            })
-            if(findUser){
-                return res.status(401).send({
-                    message:"El usuario ya existe!"
-                })
-            }
-            data.role = {
-                idRol: data.rolId
-            }
-            data.dependency = {
-                idDependency:data.dependencyId
-            }
-            let recorUser =await  user.save(data)
-            findUser = await  user.findOne({
-                where: {
-                    idUser:recorUser.idUser
-                },
-                relations:['role','dependency']
-            })
-            res.status(200).send({
-                message:"Usuario creado exitosamente",
-                data:findUser
-            })           
-        } catch (error) {
-            return res.status(500).send({message:error})
+    getAccessToken = (req,res) => {
+        const accessToken = generateAccessToken();
+    
+        return controllerResponse(
+          createResponse({
+            data: {
+              accessToken,
+            },
+            message: 'Token de acceso generado correctamente!',
+          }),
+          res
+        );
+      };
+
+     login = async (req,res)=>{
+    try {
+        const {body} = req;
+        const userRepository = getRepository('User');
+        const user = (await userRepository.findOne({
+          where: {
+            email: body.email,
+          },
+        })) ;
+        if (!user) {
+          return controllerResponse( createErrorResponse({
+            httpStatusCode: 404,
+            message: 'Usuario no encontrado',
+          }),res );
         }
+        if (user.state !== 'active') {
+          return controllerResponse( createErrorResponse({
+            httpStatusCode: 400,
+            message: 'Su usuario se encuentra inactivo',
+          }),res );
+        }
+       
+        const passwordCheck =  await sha1(body.password).toString()
+       
+      
+        if (passwordCheck !== user.password) {
+          return controllerResponse( 
+            createErrorResponse({
+            httpStatusCode: 403,
+            message: 'Contraseña invalida',
+          }),res );
+        }
+        const authToken = generateAuthToken({
+            idUser: user.idUser,
+        });
+        await tokenLibrary.saveUserToken({
+          authToken,
+          repository: getRepository('UserToken'),
+          user,
+        });
+        const userCopy = { ...user };
+        delete userCopy.password;
+        return  controllerResponse( 
+            createResponse({
+          data: {
+            user: userCopy,
+            authToken,
+          },
+          message: 'Usuario logueado correctamente',
+        }),res  );      
+    } catch (e) {
+        return controllerResponse(createErrorResponse({
+            message: 'Server error',
+            data: e,
+          }),res );
+    }
+  
+    }
+
+     createAccount =  async (req,res)=>{
+        try {
+
+            let {body} = req;
+            let user = body;
+            const userRepository = getRepository('User');
+            const existsUser = await userRepository.findOne({
+              where: {
+                email: body.email,
+              },
+            });
+            if (existsUser) {
+              return controllerResponse( createErrorResponse({
+                httpStatusCode: 400,
+                message: 'El usuario ya se encuenta registrado!',
+              }),res);
+            }
+
+        const hashPassword  = await sha1(body.password).toString();
+        user.password = hashPassword
+        user.createdAt = new Date();
+            const savedUser = await userRepository.save(user);
+            const authToken = generateAuthToken({
+                idUser: savedUser.insertId
+            });
+            await tokenLibrary.saveUserToken({
+              authToken,
+              repository: getRepository('UserToken'),
+              user: savedUser ,
+            });
+            delete savedUser.password;
+            return controllerResponse(
+                createResponse({
+                    httpStatusCode: 201,
+                    message: 'Usuario creado exitosamente!',
+                    data: {
+                      user: savedUser,
+                      authToken,
+                    },
+                  }),
+                  res
+            );
+       
+          } catch (e) {
+            return controllerResponse(createErrorResponse({
+                message: 'Server error ' + e ,
+                data: e,
+              }),res );
+          }
     }
     async getUser(req,res){
         const idUser = req.params.id

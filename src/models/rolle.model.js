@@ -10,6 +10,11 @@ module.exports = new EntitySchema({
             type: "int",
             generated: true,
         },
+        name:{
+            name:'name',
+            type:'varchar',
+            nullable:false
+        },
         description: {
             name:"description",
             type: "varchar",
@@ -17,24 +22,10 @@ module.exports = new EntitySchema({
             nullable:false,
         },
         state:{
-            type:"bit",
-        
-            nullable:false,
-        },
-        siglaRol:{
-            name:"sigla_rol",
             type:"varchar",
-            length:255,
             nullable:false,
-        }
-    },
-    relations: {
-        user: {
-            target: "User",
-            type: "one-to-many",
-            joinTable: true,
-            cascade: true
         },
-     
-    }
+ 
+    },
+
 });
