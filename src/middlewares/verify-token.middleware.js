@@ -66,7 +66,7 @@ const {
         await tokenRepository.update(
           {
             user: {
-                idUser: tokenVerifiedContent.id,
+                idUser: tokenVerifiedContent.idUser,
             },
           },
           {

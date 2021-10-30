@@ -13,6 +13,7 @@
   "author": "MisterJS",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1018.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
@@ -24,7 +25,10 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
+    "nodemailer": "^6.7.0",
+    "nodemailer-express-handlebars": "^4.0.0",
     "sha1": "^1.1.1",
+    "twilio": "^3.70.0",
     "typeorm": "^0.2.37"
   },
   "devDependencies": {
