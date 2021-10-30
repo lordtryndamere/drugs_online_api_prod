@@ -2,6 +2,7 @@ const {createConnection} = require('typeorm');
 const models = require('../models')
 const databaseConfig = require('./database.config')
 const initializeDb = async () => {
+  console.log(databaseConfig.database);
   return createConnection({
     type: databaseConfig.type ,
     database: databaseConfig.database,

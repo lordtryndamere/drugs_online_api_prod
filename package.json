@@ -6,7 +6,8 @@
   "scripts": {
     "dev:development": "cross-env NODE_ENV=development DOTENV_FLOW_PATH=./environments nodemon",
     "dev:staging": "cross-env NODE_ENV=staging DOTENV_FLOW_PATH=./environments nodemon",
-    "dev:production": "cross-env NODE_ENV=production DOTENV_FLOW_PATH=./environments nodemon"
+    "dev:production": "cross-env NODE_ENV=production DOTENV_FLOW_PATH=./environments nodemon",
+    "start":"cross-env NODE_ENV=staging DOTENV_FLOW_PATH=./environments    node -r dotenv-flow/config ./src/index.js "
   },
   "keywords": [],
   "author": "MisterJS",
