@@ -376,7 +376,7 @@ class UserController {
         message: (req).lang.serverError,
       }), res);
     }
-  }
+  }     
 
   updateProfile = async (
     req, res) => {
