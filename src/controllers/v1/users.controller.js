@@ -79,7 +79,38 @@ class UserController {
     }
 
   }
+activeUser =  async (req,res) =>{
+  const userRepository = getRepository('User');
+  const { body } = req;
+  const { email } = body;
+  const user = await userRepository.findOne({
+    where: {
+      email,
+    },
+  })
 
+  if (!user) {
+    return createErrorResponse({
+      httpStatusCode: 404,
+      message: 'Usuario no encontrado',
+    });
+  }
+  await userRepository.update(
+    {
+      idUser: user.idUser,
+    },
+    {
+      state: 'active',
+    }
+  );
+
+  return controllerResponse(createResponse({
+    httpStatusCode:201,
+    message: 'Usuario activado exitosamente',
+    data:{}
+
+  }), res);
+}
   sendVerifyPhone = async (req, res) => {
     try {
       const { body } = req;

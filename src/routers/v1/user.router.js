@@ -14,5 +14,6 @@ module.exports = () =>{
     router.delete('/disable-account',vertifyTokenMiddleware('auth'),user.disableAccount)
     router.put('/update-profile',vertifyTokenMiddleware('auth'),user.updateProfile)
     router.put('/update-password',vertifyTokenMiddleware('access'),user.updatePassword)
+    router.put('/active-user',vertifyTokenMiddleware('access'),user.activeUser)
     return router
 }
