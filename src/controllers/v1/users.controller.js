@@ -321,6 +321,8 @@ class UserController {
 
       });
       return controllerResponse(createResponse({
+        httpStatusCode:201,
+        message:'Usuario obtenido con exito',
         data: {
           user,
           authToken
