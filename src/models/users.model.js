@@ -41,6 +41,12 @@ module.exports = new EntitySchema({
             type:"varchar",
             length:255,
             nullable:false,
+        },
+        address:{
+            name:"address",
+            type:"varchar",
+            length:255,
+            nullable:false,
         }
         ,
         phoneNumber:{
