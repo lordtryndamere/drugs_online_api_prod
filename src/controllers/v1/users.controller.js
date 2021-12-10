@@ -81,45 +81,45 @@ class UserController {
   }
 
   sendVerifyPhone = async (req, res) => {
-  try {
-    const {body} = req;
-    const userRepository = getRepository('User');
-    const user = (await userRepository.findOne({
-      where: {
-        email: body.phoneNumber,
-      },
-    }));
+    try {
+      const { body } = req;
+      const userRepository = getRepository('User');
+      const user = (await userRepository.findOne({
+        where: {
+          email: body.phoneNumber,
+        },
+      }));
 
 
-    const code = generateCode();
-    const snsMessage = `Tu codigo de verificacion es ${code}`;
-    const messageResponse = await awsInstance.sendSMS(
-      body.phoneNumber,
-      snsMessage
-    )
+      const code = generateCode();
+      const snsMessage = `Tu codigo de verificacion de DrugsOnline es : ${code}`;
+      const messageResponse = await awsInstance.sendSMS(
+        body.phoneNumber,
+        snsMessage
+      )
 
 
 
-    if (messageResponse.code !== 100) {
-      return createErrorResponse({
-        httpStatusCode: 400,
-        message: 'Fallo al enviar el SMS'
-      });
-    }
-    return controllerResponse(createResponse({
-      httpStatusCode: 201,
-      message: 'Sms enviado exitosamente',
-      data: {
-        verificationCode: code
+      if (messageResponse.code !== 100) {
+        return createErrorResponse({
+          httpStatusCode: 400,
+          message: 'Fallo al enviar el SMS'
+        });
       }
+      return controllerResponse(createResponse({
+        httpStatusCode: 201,
+        message: 'Sms enviado exitosamente',
+        data: {
+          verificationCode: code
+        }
 
-    }), res);    
-  } catch (e) {
-    return controllerResponse(createErrorResponse({
-      data: { e },
-      message: 'Server error',
-    }), res);
-  }
+      }), res);
+    } catch (e) {
+      return controllerResponse(createErrorResponse({
+        data: { e },
+        message: 'Server error',
+      }), res);
+    }
 
 
 
@@ -376,19 +376,19 @@ class UserController {
         message: (req).lang.serverError,
       }), res);
     }
-  }     
+  }
 
   updateProfile = async (
     req, res) => {
     try {
-      const {body} = req;
-      if(body.password) delete body.password
+      const { body } = req;
+      if (body.password) delete body.password
       const user = (req).user;
       const userRepository = getRepository('User');
 
 
 
-      
+
 
 
       await userRepository.update(
@@ -400,22 +400,22 @@ class UserController {
 
       return controllerResponse(createResponse({
         message: 'Perfil actualizado exitosamente',
-      }),res);
+      }), res);
     } catch (e) {
       console.error('Error in updateProfile', e);
       return controllerResponse(createErrorResponse({
         message: 'Server error',
-      }),res);
+      }), res);
     }
   }
-  updatePassword = async (req,res) => {
+  updatePassword = async (req, res) => {
     try {
       const { body } = req;
       const userRepository = await getRepository('User');
 
       const user = (await userRepository.findOne({
         where: {
-          email:body.email
+          email: body.email
         },
       }));
 
