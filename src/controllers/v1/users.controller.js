@@ -189,14 +189,14 @@ activeUser =  async (req,res) =>{
         },
       });
 
-      await userRepository.update(
-        {
-          idUser: user.idUser,
-        },
-        {
-          state: 'active',
-        }
-      );
+      // await userRepository.update(
+      //   {
+      //     idUser: user.idUser,
+      //   },
+      //   {
+      //     state: 'active',
+      //   }
+      // );
 
       return controllerResponse(createResponse({
         message: 'Correo verificado exitosamente',
