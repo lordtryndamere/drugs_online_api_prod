@@ -18,7 +18,7 @@ class DrugsController {
       const drugsRepository = getRepository('Drugs');
       const drugs = (await drugsRepository.find({
         where: {
-        name:Like(`%${!req.body.filter?'':req.body.filter}%`),
+        name:Like(`%${!req.body.filter?'':req.body.filter}%`),   
           state:  'active',
         }
       }));
