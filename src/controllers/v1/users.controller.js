@@ -41,7 +41,12 @@ class UserController {
           message: 'Usuario no encontrado',
         }), res);
       }
-
+      if (user.state !== 'active') {
+        return controllerResponse(createErrorResponse({
+          httpStatusCode: 400,
+          message: 'Su usuario se encuentra inactivo',
+        }), res);
+      }
       const passwordCheck = await sha1(body.password).toString()
 
 
@@ -432,6 +437,7 @@ activeUser =  async (req,res) =>{
       );
 
       return controllerResponse(createResponse({
+        httpStatusCode:201, 
         message: 'Perfil actualizado exitosamente',
       }), res);
     } catch (e) {
