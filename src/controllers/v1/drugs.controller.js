@@ -5,14 +5,6 @@ const { getRepository,Like } = require('typeorm');
 const { createErrorResponse, createResponse, controllerResponse } = require('../../tools/response')
 
 class DrugsController {
-
-
-
-
-
-
-
-
   getDrugs = async (req, res) => {
     try {
       const drugsRepository = getRepository('Drugs');
