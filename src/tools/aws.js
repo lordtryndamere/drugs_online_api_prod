@@ -4,6 +4,7 @@ const Twilio = require('twilio')
 const {awsConfig} = require('../config/aws')
 
 
+
  class AwsLib {
    config;
 
@@ -15,6 +16,41 @@ const {awsConfig} = require('../config/aws')
     });
   }
 
+
+
+  getS3Instance = () =>{
+  return  new  aws.S3({
+    apiVersion:this.config.version
+  })
+  };
+
+  uploadFile = async (file,folder)=>{
+    try {
+     const getS3Instance = this.getS3Instance();
+
+
+      const params = {
+        Bucket: `${process.env.AWS_BUCKET}/${folder}`, // pass your bucket name
+        Key: `${Math.random().toString(36).slice(2)}-${file.name}`, 
+        Body: file.data
+    };
+
+    const uploadFile = await getS3Instance.upload(params).promise();
+    return{
+      code:100,
+      data:{
+        nameImage:params.Key,
+        location:uploadFile.Location
+      }
+    }
+
+    } catch (error) {
+      return {
+        code:102,
+        data:error
+      }
+    }
+  }
 
 
   getSnsInstance = () => {
