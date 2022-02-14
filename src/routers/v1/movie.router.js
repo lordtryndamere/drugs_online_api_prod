@@ -1,12 +1,15 @@
-const {Router} = require('express');
-const {MovieController} = require('../../controllers/v1')
+const { Router } = require('express');
+const { MovieController } = require('../../controllers/v1')
 const movie = new MovieController();
-const {vertifyTokenMiddleware} = require('../../middlewares/verify-token.middleware')
-module.exports = () =>{
+const { vertifyTokenMiddleware } = require('../../middlewares/verify-token.middleware')
+module.exports = () => {
     const router = Router();
-    router.post('/get-movies',movie.getMovies   );
-    router.post('/create-movie',movie.createMovie   );
-    router.post('/create-category',movie.createCategory   );
+    router.get('/get-by-category/:categoryId', vertifyTokenMiddleware('access'), movie.getMoviesByCategory);
+    router.get('/get-categories', vertifyTokenMiddleware('access'), movie.getCategories);
+    router.post('/get-movies', vertifyTokenMiddleware('access'), movie.getMovies);
+    router.post('/create-movie', vertifyTokenMiddleware('access'), movie.createMovie);
+    router.post('/create-category', vertifyTokenMiddleware('access'), movie.createCategory);
+
 
     return router
 }
